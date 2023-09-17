@@ -15,6 +15,8 @@ const configure = () => {
 
   process.env.NGINX_SITES_AVAILABLE_PATH =
     process.env.NGINX_SITES_AVAILABLE_PATH || "/etc/nginx/sites-available/";
+
+  process.env.SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
 };
 
 module.exports = { configure };

@@ -1,11 +1,41 @@
 const setupGet = (req, res) => {
+  // this function will look if the initial setup has been done
+  const fs = require("fs");
+  const config = JSON.parse(fs.readFileSync("./config.json"));
+
   res.json({
-    ok: true,
-    msg: "Setup",
+    setup: !!config.setup,
   });
 };
 
 const setupPost = (req, res) => {
+  // we read the config file
+  const fs = require("fs");
+  const config = JSON.parse(fs.readFileSync("./config.json"));
+  // if setup has been done already, we return an error
+  if (config.setup) {
+    return res.status(400).json({
+      ok: false,
+      msg: "Setup has been done already",
+    });
+  }
+  // if not, we do the setup
+  const bcrypt = require("bcrypt");
+
+  const { user, password } = req.body;
+  // we encrypt the password
+  const salt = bcrypt.genSaltSync(Number(process.env.SALT_ROUNDS));
+  const hash = bcrypt.hashSync(password, salt);
+
+  // we save the config file
+  const newConfig = {
+    setup: true,
+    user,
+    password: hash,
+  };
+  fs.writeFileSync("./config.json", JSON.stringify(newConfig));
+
+  // return a success message :D
   res.json({
     ok: true,
     msg: "Setup",
