@@ -6,24 +6,27 @@ RUN apt install nginx -y
 
 RUN apt install curl -y
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-
-RUN nvm install 18.17.1
-
-RUN nvm use 18.17.1
+RUN apt install nodejs -y
 
 RUN apt install npm -y
 
-RUN npm install -g nodemon
+RUN npm cache clean -f 
+
+RUN npm i -g n
+
+RUN n 18.17.1
+
+RUN npm i -g nodemon
 
 RUN apt install build-essential -y
 
-RUN npm install -g npm@latest
+RUN npm i -g npm@latest
 
 WORKDIR /usr/src/app
 
 COPY ./ /usr/src/app
 
-RUN npm install
+RUN npm i
 
-RUN npm start
+EXPOSE 80
+CMD ["npm", "start"]
