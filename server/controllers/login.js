@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const loginPost = (req, res) => {
   // we read the config file for the user and password
-  const config = JSON.parse(fs.readFileSync("./config.json"));
+  const config = JSON.parse(fs.readFileSync("./files/config.json"));
   // now we compare the user and password with the ones in the config file
   const { user, password } = req.body;
 
