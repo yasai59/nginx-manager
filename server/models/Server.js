@@ -19,6 +19,7 @@ class Server {
 
   routes() {
     this.app.use(this.apiPath + "/login", require("../routes/login"));
+    this.app.use(this.apiPath + "/setup", require("../routes/setup"));
   }
 
   listen() {

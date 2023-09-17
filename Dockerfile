@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 # update the repository sources list and install dependencies
 RUN apt update
-
+# it's all in separate lines so it's easier to know what's happening when building the image
 RUN apt install nginx -y
 
 RUN apt install curl -y
