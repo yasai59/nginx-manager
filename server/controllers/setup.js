@@ -23,7 +23,7 @@ const setupPost = (req, res) => {
   }
 
   // if not, we do the setup
-  const bcrypt = require("bcrypt");
+  const bcrypt = require("bcryptjs");
 
   const { user, password } = req.body;
   // we encrypt the password

@@ -7,7 +7,7 @@ const configure = () => {
     process.env.ENVIRONMENT = "dev";
   }
   // configure the port
-  process.env.PORT = process.env.PORT || 3000;
+  process.env.PORT = process.env.PORT || 81;
 
   // configure the nginx paths that we need
   process.env.NGINX_SITES_PATH =

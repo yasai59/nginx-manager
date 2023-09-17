@@ -28,5 +28,11 @@ COPY ./ /usr/src/app
 
 RUN npm i
 
+# expose the ports
+
 EXPOSE 80
-CMD ["npm", "start"]
+EXPOSE 443
+EXPOSE 81
+
+# start nginx and the application
+CMD service nginx start && npm start
