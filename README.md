@@ -50,7 +50,7 @@ From now on all the request need a header named x-token with the provided token 
       "uuid": "the unique uuid of the site",
       "title": "the site title",
       "url": "the access url",
-      "type": "local" | "proxy"
+      "type": ["local" | "proxy"]
     }
   ]
   ```
@@ -60,7 +60,7 @@ From now on all the request need a header named x-token with the provided token 
     {
       "title": "the title of the site",
       "url": "the access url",
-      "type": "local" | "proxy",
+      "type": ["local" | "proxy"],
       // only for type proxy
       "ip": "ip of the server we are doing a reverse proxy",
       "port": "the port of the service"
@@ -68,16 +68,16 @@ From now on all the request need a header named x-token with the provided token 
     ```
     - response
     ```json
-    "ok": true | false,
+    "ok": [true | false],
     "msg": "success or error message"
     ```
 
-## WORK ON PROGRESS
+## WORK IN PROGRESS
 
 the application is still on development and will not edit any nginx configuration for now.
 
 for now this only creates the nginx configuration file, stores it in a temporal folder and restarts nginx when a new site is submitted
-
+Status
 
 ## Goals
 
