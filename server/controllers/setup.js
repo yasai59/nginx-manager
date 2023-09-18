@@ -1,8 +1,7 @@
-const setupGet = (req, res) => {
-  // this function will look if the initial setup has been done
-  const fs = require("fs");
+const { getConfig } = require("../helpers/getConfig");
 
-  const config = JSON.parse(fs.readFileSync("./files/config.json"));
+const setupGet = (req, res) => {
+  const config = getConfig();
 
   res.json({
     setup: !!config.setup,
@@ -13,7 +12,7 @@ const setupPost = (req, res) => {
   // we read the config file
   const fs = require("fs");
   const keypair = require("keypair");
-  const config = JSON.parse(fs.readFileSync("./files/config.json"));
+  const config = getConfig();
   // if setup has been done already, we return an error
   if (config.setup) {
     return res.status(400).json({

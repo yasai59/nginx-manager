@@ -3,7 +3,12 @@ const { file } = require("../helpers/nginx-files");
 const { exec } = require("child_process");
 
 const sitesGet = (req, res) => {
-  const sites = JSON.parse(fs.readFileSync("./files/sites.json"));
+  let sites;
+  try {
+    sites = JSON.parse(fs.readFileSync("./files/sites.json"));
+  } catch (e) {
+    sites = [];
+  }
 
   res.json(sites);
 };
