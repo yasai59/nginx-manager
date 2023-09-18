@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { verifyJWT } = require("../helpers/verifyJWT");
 
 class Server {
   constructor() {
@@ -21,6 +22,14 @@ class Server {
     this.app.use(this.apiPath + "/login", require("../routes/login"));
     this.app.use(this.apiPath + "/setup", require("../routes/setup"));
     this.app.use(this.apiPath + "/sites", require("../routes/sites"));
+
+    // Verify token
+    this.app.get(this.apiPath + "/verifyToken", (req, res) => {
+      const { token } = req.body;
+      res.json({
+        valid: verifyJWT(token),
+      });
+    });
   }
 
   listen() {
