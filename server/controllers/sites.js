@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { file } = require("../helpers/nginx-files");
+const { exec } = require("child_process");
 
 const sitesGet = (req, res) => {
   const sites = JSON.parse(fs.readFileSync("./files/sites.json"));
@@ -9,13 +10,8 @@ const sitesGet = (req, res) => {
 
 const sitesPost = (req, res) => {
   const { v4: uuidv4 } = require("uuid");
-  const { exec } = require("child_process");
   // read the site details from the request body
   const { title, url, type } = req.body;
-
-  /* 
-TODO: we actually need to create the nginx file and save it to the proper location before adding the site to the sites.json file
-  */
 
   // handle nginx config file creation
   if (type === "proxy") {
@@ -38,10 +34,6 @@ TODO: we actually need to create the nginx file and save it to the proper locati
       type,
     });
   }
-
-  // handle nginx config file saving
-
-  // handle nginx config file linking
   // handle nginx reloading
   exec("service nginx restart");
 
@@ -85,10 +77,6 @@ TODO: we actually need to create the nginx file and save it to the proper locati
 const sitesDelete = (req, res) => {
   const { uuid } = req.body;
 
-  /*
-TODO: we actually need to delete the nginx file and unlink it before deleting the site from the sites.json file
-  */
-
   // read the sites file
   let sites;
   try {
@@ -108,11 +96,18 @@ TODO: we actually need to delete the nginx file and unlink it before deleting th
       msg: "There are no sites to delet",
     });
   }
+  // we manage the deletion of the file
+  const url = siteExists.url;
+  file({
+    url,
+    action: "delete",
+  });
 
   sites = sites.filter((site) => site.id !== uuid);
 
   // wirte the sites file without the deleted site
   fs.writeFileSync("./files/sites.json", JSON.stringify(sites));
+  exec("service nginx restart");
 
   res.json({
     ok: true,
@@ -120,8 +115,70 @@ TODO: we actually need to delete the nginx file and unlink it before deleting th
   });
 };
 
+// update a site
+const sitesPut = (req, res) => {
+  const { uuid } = req.body;
+  const { title, url, ip, port } = req.body;
+
+  let sites;
+
+  try {
+    sites = JSON.parse(fs.readFileSync("./files/sites.json"));
+  } catch (e) {
+    return res.status(400).json({
+      ok: false,
+      msg: "There are no sites to update",
+    });
+  }
+
+  // look if we have a site with the same uuid
+  const site = sites.find((site) => site.id === uuid);
+  if (!site) {
+    return res.status(400).json({
+      ok: false,
+      msg: "There are no sites to update",
+    });
+  }
+
+  if (url) {
+    if (site.url !== url) {
+      file({
+        url,
+        uuid,
+        type: site.type,
+        ip,
+        port,
+        action: "update",
+        oldUrl: site.url,
+      });
+    }
+  }
+
+  if (title) {
+    sites.map((site) => {
+      if (site.id === uuid) {
+        site.title = title;
+        if (url) {
+          site.url = url;
+        }
+      }
+      return site;
+    });
+  }
+
+  // wirte the sites file with the updated site
+  fs.writeFileSync("./files/sites.json", JSON.stringify(sites));
+  exec("service nginx restart");
+
+  res.json({
+    ok: true,
+    msg: "sitesPut",
+  });
+};
+
 module.exports = {
   sitesGet,
   sitesPost,
   sitesDelete,
+  sitesPut,
 };

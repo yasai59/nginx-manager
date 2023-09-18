@@ -1,6 +1,11 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
-const { sitesGet, sitesPost, sitesDelete } = require("../controllers/sites");
+const {
+  sitesGet,
+  sitesPost,
+  sitesDelete,
+  sitesPut,
+} = require("../controllers/sites");
 const { verifyToken } = require("../middlewares/verifyToken");
 const { validarCampos } = require("../helpers/validarCampos");
 
@@ -28,6 +33,16 @@ router.delete(
     validarCampos,
   ],
   sitesDelete
+);
+
+router.put(
+  "/",
+  [
+    verifyToken,
+    check("uuid", "the uuid is required").notEmpty(),
+    validarCampos,
+  ],
+  sitesPut
 );
 
 module.exports = router;
