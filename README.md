@@ -7,13 +7,13 @@
 ### public routes
 - Initial setup:
   - In order to find out if the initial setup has been made you should GET /api/setup and you will receive a respose like this:
-  ```json
+  ```js
   {
-    "setup": true | false
+    "setup": [true || false]
   }
   ```
   - For creating the initial setup you should POST /api/setup with a request body like this:
-  ```json
+  ```js
   {
     "user": "your username",
     "password": "y0ur p4s5w0rd"
@@ -24,14 +24,14 @@
 
 - Login
   - For loggin in you'll need to send a POST to /api/login with the next body:
-  ```json
+  ```js
   {
     "user": "your username",
     "password": "y0ur p4s5w0rd"
   }
   ```
   In response you will obtain a error if something went wrong, if not the response will look like this:
-  ```json
+  ```js
   {
     "ok": true,
     "msg": "loginPost",
@@ -44,31 +44,31 @@ From now on all the request need a header named x-token with the provided token 
 
 - Manage sites
   - GET to /api/sites (get a list of the available sites)
-  ```json
+  ```js
   [
     {
       "uuid": "the unique uuid of the site",
       "title": "the site title",
       "url": "the access url",
-      "type": ["local" | "proxy"]
+      "type": ["local" || "proxy"]
     }
   ]
   ```
   - POST to /api/sites (submit a new site to the system) WORK IN PROGRESS
     - body
-    ```json
+    ```js
     {
       "title": "the title of the site",
       "url": "the access url",
-      "type": ["local" | "proxy"],
+      "type": ["local" || "proxy"],
       // only for type proxy
       "ip": "ip of the server we are doing a reverse proxy",
       "port": "the port of the service"
     }
     ```
     - response
-    ```json
-    "ok": [true | false],
+    ```js
+    "ok": [true || false],
     "msg": "success or error message"
     ```
 
