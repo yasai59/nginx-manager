@@ -1,13 +1,13 @@
 const fs = require("fs");
 
 handleProxy = (url, ip, port) => {
-  const schema = fs.readFileSync("./schemes/nginx_proxy.conf");
+  const schema = fs.readFileSync("./server/schemes/nginx_proxy.conf");
 
   const result = schema
     .toString()
     .replace(/{DOMINIO}/gi, url)
     .replace(/{IP}/gi, ip)
-    .replace(/{PORT}/gi, port);
+    .replace(/{PUERTO}/gi, port);
 
   fs.writeFileSync(`./files/tmp/${url}.conf`, result);
 };
