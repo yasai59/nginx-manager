@@ -1,3 +1,4 @@
+const { generateJWT } = require("../helpers/generateJWT");
 const { getConfig } = require("../helpers/getConfig");
 
 const setupGet = (req, res) => {
@@ -39,10 +40,13 @@ const setupPost = (req, res) => {
   };
   fs.writeFileSync("./files/config.json", JSON.stringify(newConfig));
 
+  const token = generateJWT(user);
+
   // return a success message :D
   res.json({
     ok: true,
-    msg: "Setup",
+    token,
+    user,
   });
 };
 
