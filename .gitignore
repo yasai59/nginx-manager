@@ -1,3 +1,4 @@
 node_modules/
-files/
+config.json
+sites.json
 .env
