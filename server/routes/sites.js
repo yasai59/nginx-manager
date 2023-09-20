@@ -27,11 +27,7 @@ router.post(
 
 router.delete(
   "/",
-  [
-    verifyToken,
-    check("uuid", "the uuid is required").notEmpty(),
-    validarCampos,
-  ],
+  [verifyToken, check("id", "the id is required").notEmpty(), validarCampos],
   sitesDelete
 );
 
