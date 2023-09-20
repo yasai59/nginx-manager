@@ -80,7 +80,7 @@ const sitesPost = (req, res) => {
 };
 
 const sitesDelete = (req, res) => {
-  const { uuid } = req.body;
+  const { id } = req.body;
 
   // read the sites file
   let sites;
@@ -94,24 +94,27 @@ const sitesDelete = (req, res) => {
   }
 
   // look if we have a site with the same uuid
-  const siteExists = sites.find((site) => site.id === uuid);
+  const siteExists = sites.find((site) => site.id === id);
   if (!siteExists) {
     return res.status(400).json({
       ok: false,
       msg: "There are no sites to delet",
     });
   }
+  // wirte the sites file without the deleted site
+  sites = sites.filter((site) => site.id !== id);
+  fs.writeFileSync("./files/sites.json", JSON.stringify(sites));
   // we manage the deletion of the file
   const url = siteExists.url;
-  file({
-    url,
-    action: "delete",
-  });
+  try {
+    file({
+      url,
+      action: "delete",
+    });
+  } catch (e) {
+    console.log("Error deleting file");
+  }
 
-  sites = sites.filter((site) => site.id !== uuid);
-
-  // wirte the sites file without the deleted site
-  fs.writeFileSync("./files/sites.json", JSON.stringify(sites));
   exec("service nginx restart");
 
   res.json({

@@ -1,4 +1,5 @@
 node_modules/
-files/
-files/tmp/
+config.json
+sites.json
+*.conf
 .env
