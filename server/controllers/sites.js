@@ -57,6 +57,11 @@ const sitesPost = (req, res) => {
     type,
   };
 
+  if (newSite.type === "proxy") {
+    newSite.ip = req.body.ip;
+    newSite.port = req.body.port;
+  }
+
   // look if we have a site with the same url or title
   const siteExists = sites.find(
     (site) => site.url === url || site.title === title
@@ -125,7 +130,7 @@ const sitesDelete = (req, res) => {
 
 // update a site
 const sitesPut = (req, res) => {
-  const { uuid } = req.body;
+  const { id } = req.body;
   const { title, url, ip, port } = req.body;
 
   let sites;
@@ -139,8 +144,8 @@ const sitesPut = (req, res) => {
     });
   }
 
-  // look if we have a site with the same uuid
-  const site = sites.find((site) => site.id === uuid);
+  // look if we have a site with the same id
+  const site = sites.find((site) => site.id === id);
   if (!site) {
     return res.status(400).json({
       ok: false,
@@ -152,7 +157,7 @@ const sitesPut = (req, res) => {
     if (site.url !== url) {
       file({
         url,
-        uuid,
+        uuid: id,
         type: site.type,
         ip,
         port,
@@ -164,7 +169,7 @@ const sitesPut = (req, res) => {
 
   if (title) {
     sites.map((site) => {
-      if (site.id === uuid) {
+      if (site.id === id) {
         site.title = title;
         if (url) {
           site.url = url;
