@@ -47,14 +47,14 @@ From now on all the request need a header named x-token with the provided token 
   ```js
   [
     {
-      "uuid": "the unique uuid of the site",
+      "id": "the unique id of the site",
       "title": "the site title",
       "url": "the access url",
       "type": "local" || "proxy"
     }
   ]
   ```
-  - POST to /api/sites (submit a new site to the system) WORK IN PROGRESS
+  - POST to /api/sites (submit a new site to the system)
     - body
     ```js
     {
@@ -68,19 +68,59 @@ From now on all the request need a header named x-token with the provided token 
     ```
     - response
     ```js
+    {
     "ok": true || false,
     "msg": "success or error message"
+    }
+    ```
+  - PUT to /api/sites (edit a site)
+    - body
+    ```js
+    {
+      "id": "the site id",
+      // the next properties are not mandatory, only send the ones you wanna change
+      "title": "the title of the site",
+      "url": "the access url",
+      "type": "local" || "proxy",
+      "ip": "ip of the server we are doing a reverse proxy",
+      "port": "the port of the service"
+    }
+    ```
+    - response
+    ```js
+    {
+    "ok": true || false,
+    "msg": "success or error message"
+    }
+    ```
+  - DELETE to /api/sites (delete a site)
+    - body
+    ```js
+    {
+      "id": "the site id",
+    }
+    ``` 
+    - response
+    ```js
+    {
+    "ok": true || false,
+    "msg": "success or error message"
+    }
     ```
 
 ## WORK IN PROGRESS
 
-the application is still on development and will not edit any nginx configuration for now.
+The application now can create, edit and delete nginx configuration files, these files will be stored in the files/tmp folder in dev mode,
+in prod mode it will work properly.
 
-for now this only creates the nginx configuration file, stores it in a temporal folder and restarts nginx when a new site is submitted
-Status
+There is not any https support at the moment.
+
+Now i'm working in making posible to upload the static pages files.
+
+The next step after making upload posible, will be support for php webpages
+
 
 ## Goals
 
 - the goal for this endpoint is that you can add, edit, and manage your sites configuration with a web UI. It will be usefull for either local files o reverse proxy 
 - In addition I would like to implement certbot SSL for even easier HTTPS web deployment
-- I dont think that i need any database to accomplish this goals, so i'll be using and initial setup with an admin user and a encrypted password (i'll have to think if I do this via terminal or webUI)
