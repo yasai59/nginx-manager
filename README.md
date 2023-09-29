@@ -107,6 +107,36 @@ From now on all the request need a header named x-token with the provided token 
     "msg": "success or error message"
     }
     ```
+- Manage Files (work in progress)
+  - POST to /api/files
+    - body
+    ```js
+    {
+      "id": 'site id'
+      "files": FileList
+    }
+    ``` 
+    - response
+    ```js
+    {
+      "ok": true || false,
+      "msg": "success or error msg"
+    }
+    ```
+  - DELETE to /api/files
+    - body
+    ```js
+    {
+      id: "site id"
+    }
+    ``` 
+    - response
+    ```js
+    {
+      "ok": true || false,
+      "msg": "success or error msg"
+    }
+    ``` 
 
 ## WORK IN PROGRESS
 
