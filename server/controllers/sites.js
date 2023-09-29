@@ -130,11 +130,10 @@ const sitesDelete = (req, res) => {
 
 // update a site
 const sitesPut = (req, res) => {
-  const { id } = req.body;
-  const { title, url, ip, port } = req.body;
+  const { id, title, url, ip, port } = req.body;
 
   let sites;
-
+  // test if we have sites to update
   try {
     sites = JSON.parse(fs.readFileSync("./files/sites.json"));
   } catch (e) {
@@ -152,32 +151,27 @@ const sitesPut = (req, res) => {
       msg: "There are no sites to update",
     });
   }
+  file({
+    url: url || site.url,
+    id,
+    type: site.type,
+    ip: ip || site.ip,
+    port: port || site.port,
+    action: "update",
+    oldUrl: site.url,
+  });
 
-  if (url) {
-    if (site.url !== url) {
-      file({
-        url,
-        uuid: id,
-        type: site.type,
-        ip,
-        port,
-        action: "update",
-        oldUrl: site.url,
-      });
-    }
-  }
-
-  if (title) {
-    sites.map((site) => {
-      if (site.id === id) {
-        site.title = title;
-        if (url) {
-          site.url = url;
-        }
+  sites.map((site) => {
+    if (site.id === id) {
+      site.title = title || site.title;
+      site.url = url || site.url;
+      if (site.type === "proxy") {
+        site.ip = ip || site.ip;
+        site.port = port || site.port;
       }
-      return site;
-    });
-  }
+    }
+    return site;
+  });
 
   // wirte the sites file with the updated site
   fs.writeFileSync("./files/sites.json", JSON.stringify(sites));
